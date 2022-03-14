@@ -1,37 +1,72 @@
-const fs = require("fs");
-const path = require("path");
-const router = require("express").Router();
-let saveNote = [];
-let db = require("../db/db.json");
+//necessary packages and file paths
+const fs = require('fs');
+var path = require("path");
+const dbPath = path.join(__dirname, "../db/db.json");
+const { v4: uuidv4 } = require('uuid')
 
-router.get("/notes", (req, res) => {
-  fs.readFile(path.join(__dirname, "../db/db.json"), (err, data) => {
-    res.json(JSON.parse(data));
-  });
-});
+module.exports = function (app) {
 
-router.get("/notes/:id", (req, res) => {
-  const noteId = +req.params.id;
-  const theNote = db.filter((note) => noteId === note.id);
-  res.status(200).send(theNote);
-});
+    //get method to print list to page.
+    app.get("/api/notes", function (req, res) {
+        fs.readFile(dbPath, 'utf8', (err, data) => {
+            if (err) throw err;
+            var notesResponse = JSON.parse(data)
+            res.json(notesResponse);
+        })
+    });
 
-router.post("/notes", (req, res) => {
-  const body = req.body;
-  fs.readFile(path.join(__dirname, "../db/db.json"), (err, data) => {
-    if (err) {
-      throw err;
-    }
+    //posts new note data to note array
+    app.post("/api/notes", function (req, res) {
+        
+        fs.readFile(dbPath, 'utf8', (err, data) => {
+            if (err) throw err;
 
-    saveNote = JSON.parse(data);
-    body.id = Math.floor(Math.random() * 10000);
-    saveNote.push(body);
-    fs.writeFileSync(
-      path.join(__dirname, "../db/db.json"),
-      JSON.stringify(saveNote)
-    );
-    res.status(200).send(saveNote);
-  });
-});
+            let savedNotes;
 
-module.exports = router;
+            if (data) {
+                savedNotes = JSON.parse(data)
+            }
+
+            let newNote = req.body
+
+            newNote.id = uuidv4()
+
+            if (savedNotes) {
+                savedNotes.push(newNote);
+            } else {
+                savedNotes = [newNote];
+            }
+
+            fs.writeFile(dbPath, JSON.stringify(savedNotes), (err, data) => {
+                if (err) throw err;
+                res.json(newNote);
+            })
+
+        })
+    })
+
+    //deletes note
+    app.delete("/api/notes/:id", function (req, res) {
+
+        let deleteId = req.params.id
+
+        fs.readFile(dbPath, 'utf8', (err, data) => {
+            if (err) throw err;
+
+            let noteArray = JSON.parse(data);
+
+            for (let i = 0; i < noteArray.length; i++) {
+                if (deleteId == noteArray[i].id) {
+                    noteArray.splice(i, 1)
+                }
+            }
+
+            fs.writeFile(dbPath, JSON.stringify(noteArray), (err, data) => {
+                if (err) throw err;
+                res.send();
+               
+            })
+        })
+
+    })
+}
