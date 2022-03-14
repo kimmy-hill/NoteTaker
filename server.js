@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 
 const app = express();
 
@@ -8,11 +8,12 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static('./public'));
+app.use(express.static('public'));
 
 //Getting routes on server
-require("./routes/index_api")(app);
-require("./routes/index_html")(app);
+app.use(require("./routes/index_api"));
+app.use(require("./routes/index_html"));
+
 
 
 app.listen(PORT, () => console.log(`App listening on PORT: ${PORT}`))
