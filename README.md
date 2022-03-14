@@ -24,6 +24,9 @@ Deployed App:
 https://mysterious-earth-23188.herokuapp.com
 
 Home Page:
-<img width="1512" alt="Screen Shot 2022-03-14 at 12 48 08 AM" src="https://user-images.githubusercontent.com/95260935/158107112-99487822-1da1-4d0b-aa90-9bff40ea01d9.png">
+<img width="1512" alt="Screen Shot 2022-03-14 at 12 48 08 AM" src="https://user-images.githubusercontent.com/95260935/158107112-99487822-1da1-4d0b-aa90-9bff40ea01d9.png"> 
+
+Note Taking Page:
+<img width="1512" alt="Screen Shot 2022-03-14 at 1 13 38 AM" src="https://user-images.githubusercontent.com/95260935/158109026-8659afdb-3ac4-4042-87cd-79a428ecd4ee.png">
 
 Starter Code: https://github.com/coding-boot-camp/miniature-eureka
